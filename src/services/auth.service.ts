@@ -23,6 +23,15 @@ export class AuthService {
         await this.userRepo.save(user)
         return this.generateToken(user.id, user.email, user.role)
     }
+    async login(email: string, password: string) {
+        let user: User | null = await this.userRepo.findOneBy({ email: email })
+        if (!user) throw new AppError("incorrect email or password", 400)
+
+        let matched =await  bcrypt.compare(password, user.password).then(result => result ? true : false) 
+        if (!matched) throw new AppError("incorrect email or password", 400)
+        return this.generateToken(user.id, user.email, user.role)
+
+    }
     private generateToken(id: number, email: string, role: Roles) {
         return jwt.sign({
             id, email, role
