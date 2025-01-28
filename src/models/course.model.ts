@@ -5,10 +5,12 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     BaseEntity,
-    OneToMany
+    OneToMany,
+    ManyToOne
 } from "typeorm";
 import { ICourse } from "../interfaces/course.INTF";
 import { User } from "./user.model";
+import { Category } from "./category.model";
 
 
 @Entity()
@@ -22,11 +24,10 @@ export class Course extends BaseEntity implements ICourse {
     @Column({ type: "text" })
     description!: string;
 
-    @OneToMany(() => User, (user) =>user.id )
+    @OneToMany(() => User, (user) => user.id)
     instructor!: number;
-
-    @Column({ type: "varchar", length: 50 })
-    category!: string;
+    @ManyToOne(() => Category, (category) => category.id)
+    category!: number;
 
     @Column({ type: "varchar", length: 20 })
     level!: string;

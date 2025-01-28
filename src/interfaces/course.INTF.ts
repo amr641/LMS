@@ -3,7 +3,7 @@ export interface ICourse {
     title: string;
     description: string;
     instructor?: number;
-    category: string;
+    category: number;
     level: string;
     price?: number; // Optional, in case the course is free
     duration?: string; // Optional

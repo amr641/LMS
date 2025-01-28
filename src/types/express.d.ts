@@ -1,3 +1,5 @@
+import { Roles } from "../enums/roles.enum";
+
 declare global {
     // extending the Request type globaly
     namespace Express {
@@ -12,4 +14,10 @@ declare global {
         }
     }
 }
-export {}; 
+export type DecodedToken = {
+    userId: number;
+    name: string;
+    iat: number;
+    role: Roles;
+};
+export { }; 

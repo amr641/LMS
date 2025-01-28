@@ -8,7 +8,7 @@ export interface IUser {
     role: Roles; 
     DOB: Date; 
     phone:number;
-    createdAt: Date; 
-    updatedAt: Date; 
+    createdAt?: Date; 
+    updatedAt?: Date; 
     
   }
