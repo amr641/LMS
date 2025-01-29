@@ -11,7 +11,7 @@ export const AppDataSource =
         database: "lms",
         entities: [User],
         synchronize: true,
-        logging: true,
+        logging: false,
     });
 class DBconnection {
 

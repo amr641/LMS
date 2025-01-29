@@ -19,5 +19,7 @@ export type DecodedToken = {
     name: string;
     iat: number;
     role: Roles;
+    email:string;
+    phone:number
 };
 export { }; 
