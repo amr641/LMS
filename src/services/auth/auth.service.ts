@@ -13,10 +13,13 @@ import 'dotenv/config'
 
 
 export class AuthService {
+    
     private userRepo: Repository<User>
     constructor() {
         this.userRepo = AppDataSource.getRepository(User);
     }
+
+
     async register(userData: IUser) {
         let user: User | null = await this.userRepo.findOneBy({ email: userData.email })
         if (user) throw new AppError("user already exist", 400)
@@ -40,7 +43,7 @@ export class AuthService {
     public generateToken(id: number, email: string, phone: number, role: Roles) {
         return jwt.sign({
             id, email, role, phone
-        }, "zxc", { expiresIn: "1h" })
+        }, process.env.JWT_KEY as string, { expiresIn: "1h" })
     }
    
 }
