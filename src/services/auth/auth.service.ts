@@ -42,17 +42,28 @@ export class AuthService {
 
     }
     async resetPassword(resetData: ResetPasswordDTO) {
+        // let user: IUser | null = await this.userRepo.findOne({ where: { id: resetData.userId } });
+
+        // if (!user) throw new AppError("user not found", 404)
+        // //to avoid blocking the main thread
+        // const matched = await bcrypt.compare(resetData.oldPassword, user.password);
+        // if (!matched) throw new AppError("incorrect old password", 401)
+        // const [newPassword, token] = await Promise.all([
+        //     await bcrypt.hash(resetData.newPassword, 10),
+        //     this.generateToken(user.id, user.email, user.phone, user.role)
+        // ])
+
+        // await this.userRepo.update(user.id, { password: newPassword })
+        // return token
         let user: IUser | null = await this.userRepo.findOne({ where: { id: resetData.userId } });
 
-
         if (!user) throw new AppError("user not found", 404)
-        const matched = await new Promise<boolean>((resolve) => {
+        const matched = await new Promise<boolean>((resolve) => { //to avoid blocking the main thread
             setImmediate(async () => {
                 const result = await bcrypt.compare(resetData.oldPassword, user.password);
                 resolve(result);
             });
         });
-
 
         if (!matched) throw new AppError("incorrect old password", 401)
         let newPassword = await bcrypt.hash(resetData.newPassword, 10)

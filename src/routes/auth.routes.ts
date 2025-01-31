@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
+
 import passport from "passport";
 import { verifyToken } from "../middlewares/verifiyToken";
+import { AuthController } from "../controllers/auth/auth.controller";
 
 
 export const authRouter = Router()

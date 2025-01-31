@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { OAuthGoogleService } from "../services/auth/googleOAuth.service";
-import { AuthService } from "../services/auth/auth.service";
+import { OAuthGoogleService } from "../../services/auth/googleOAuth.service";
+import { AuthService } from "../../services/auth/auth.service";
 
 export class AuthController {
     private authServices: AuthService;
@@ -26,11 +26,11 @@ export class AuthController {
         res.status(200).json({ message: "success", token })
     }
     async resetPassword(req: Request, res: Response) { // reset password
-      
+      let {oldPassword,newPassword}= req.body
         let token = await this.authServices.resetPassword({
             userId: req.user?.id,
-            oldPassword: req.body.oldPassword,
-            newPassword: req.body.newPassword
+            oldPassword,
+            newPassword,
         })
         res.status(201).json({ message: "success", token })
     }

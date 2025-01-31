@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm"
 import { User } from "../models/user.model";
+import { Category } from "../models/category.model";
 export const AppDataSource =
     new DataSource({
         type: "mysql",
@@ -9,8 +10,8 @@ export const AppDataSource =
         username: "root",
         password: "",
         database: "lms",
-        entities: [User],
-        synchronize: true,
+        entities: [User,Category],
+        synchronize: false,
         logging: false,
     });
 class DBconnection {
