@@ -8,10 +8,10 @@ import { AuthService } from "./auth.service";
 import { IUser } from "../../interfaces/user.INTF";
 import { jwtDecode } from "jwt-decode";
 import { Roles } from "../../enums/roles.enum";
-import { DecodedToken } from "../../types/express";
+import { DecodedToken } from "../../types/DecodedToken";
 
 
-export class OAuthService {
+export class OAuthGoogleService {
     private userRepo: Repository<User>
     private authService: AuthService
     constructor() {
@@ -32,9 +32,7 @@ export class OAuthService {
                     const phoneNumber = profile.phoneNumbers?.[0]?.value;
                     if (!email) return done(new AppError("Email not found", 400));
 
-
                     const token = this.authService.generateToken(Number(profile.id), email, phoneNumber, Roles.STUDENT);
-
                     this.verifyTokenForOAuth(token)
                     return done(null, token);
                 }
@@ -52,19 +50,18 @@ export class OAuthService {
             })(req, res);
         });
     }
-    private async verifyTokenForOAuth(token: string) { // this function job is just decode the token and check if user exist or not>save em in database 
+    private async verifyTokenForOAuth(token: string) { // this function job just decode the token and check if user exist or not>save em in database 
         let decode: DecodedToken = jwtDecode(token)
         if (decode) {
             let user: IUser | null = await this.userRepo.findOneBy({ email: decode.email });
 
             if (!user) {
                 user = this.userRepo.create({
-                    name: decode.email,
                     email: decode.email,
                     phone: Number(decode.phone)
 
                 })
-               await this.userRepo.save(user)
+                await this.userRepo.save(user)
             }
         }
     }

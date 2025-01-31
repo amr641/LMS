@@ -8,7 +8,7 @@ export function bootstrab(app: Express) {
         console.error("Uncaught Exception:", err);
     });
     let baseUrl = "/api/v1";
-    app.use(passport.initialize())
+   
     app.use(baseUrl,authRouter)
 
     // global err handeling midlleware

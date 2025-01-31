@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "../utils/appError";
 
-import { DecodedToken } from "../types/express";
+import { DecodedToken } from "../types/DecodedToken";
 import { Repository } from "typeorm";
 import { User } from "../models/user.model";
 import { AppDataSource } from "../config/dbConfig";
@@ -17,10 +17,7 @@ export const verifyToken = async (
   const token = req.headers?.token as string | undefined;
   let userRepo: Repository<User> = AppDataSource.getRepository(User)
 
-  if (!token) {
-    return next(new AppError('No token provided', 401));
-  }
-
+  if (!token) throw new AppError('No token provided', 401);
 
   const decoded = await new Promise<DecodedToken>((resolve, reject) => {
     jwt.verify(token, process.env.JWT_KEY || 'secret', (err, decoded) => {
@@ -34,10 +31,10 @@ export const verifyToken = async (
     });
   });
 
-  const user = await userRepo.findOneBy({ id: decoded.userId })
-  if (!user) {
-    return next(new AppError('User not found', 404));
-  }
+  const user = await userRepo.findOneBy({ id: decoded.id })
+  if (!user) throw new AppError('User not found', 404);
+
+
 
   req.user = decoded;
   next();

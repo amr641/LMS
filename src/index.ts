@@ -5,8 +5,6 @@ const app = express();
 const port = 3000;
 import { bootstrab } from './bootstrab';
 import "dotenv/config"
-
-
 app.use(express.json());
 (new dbConnection()).establishConnection()
 bootstrab(app) 
