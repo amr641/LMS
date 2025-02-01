@@ -28,7 +28,7 @@ export class AuthController {
     async resetPassword(req: Request, res: Response) { // reset password
       let {oldPassword,newPassword}= req.body
         let token = await this.authServices.resetPassword({
-            userId: req.user?.id,
+            userId: req.user?.id!,
             oldPassword,
             newPassword,
         })

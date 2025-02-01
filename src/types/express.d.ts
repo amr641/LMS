@@ -1,7 +1,6 @@
 
-declare global {
     // extending the Request type globaly
-    namespace Express {
+    declare module 'express-serve-static-core' {
         interface Request {
             user?: {
                 id: number;
@@ -14,6 +13,6 @@ declare global {
 
         }
     }
-}
+
 
 export  {  }; 

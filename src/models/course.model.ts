@@ -5,7 +5,6 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     BaseEntity,
-    OneToMany,
     ManyToOne
 } from "typeorm";
 import { ICourse } from "../interfaces/course.INTF";
@@ -23,8 +22,8 @@ export class Course extends BaseEntity implements ICourse {
 
     @Column({ type: "text" })
     description!: string;
-
-    @OneToMany(() => User, (user) => user.id)
+    
+    @ManyToOne(() => User, (user) => user.id)
     instructor!: number;
     @ManyToOne(() => Category, (category) => category.id)
     category!: number;

@@ -11,8 +11,8 @@ import { ResetPasswordDTO } from "../../types/auth.types"
 
 
 export class AuthService {
-
-    private userRepo: Repository<User>
+    private readonly userRepo: Repository<User>
+    
     constructor() {
         this.userRepo = AppDataSource.getRepository(User);
     }
