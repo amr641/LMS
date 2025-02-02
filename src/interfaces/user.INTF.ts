@@ -1,6 +1,6 @@
 import { Roles } from "../enums/roles.enum";
 
-export interface IUser {
+ interface IUser {
     id: number; 
     name: string; 
     email: string; 
@@ -12,3 +12,13 @@ export interface IUser {
     updatedAt?: Date; 
     
   }
+  interface UserDTO {
+    id: number; 
+    name: string; 
+    email: string; 
+    role: Roles; 
+    DOB: Date; 
+    phone:number;
+  }
+
+  export {IUser,UserDTO}
