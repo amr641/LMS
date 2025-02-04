@@ -16,8 +16,8 @@ export const AppDataSource =
         database: "lms",
         entities: [User,Category,Course,Payment,Enrollment],
         migrations:["src/migrations"],
-        synchronize: true,
-        logging: true,
+        synchronize: false,
+        logging: false,
     });
 class DBconnection {
 

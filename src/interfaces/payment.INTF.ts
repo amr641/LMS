@@ -15,6 +15,8 @@ import { PaymentStatus } from "../enums/payment.status";
 interface PaymentDto {
     amount: number;
     description?: string;
-    user:number
+    user:number;
+    status?: PaymentStatus; // Payment status
+    method?: PaymentMethods;// Payment method
 }
 export {IPayment,PaymentDto}

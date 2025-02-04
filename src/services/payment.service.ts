@@ -8,7 +8,8 @@ import {
 import { Repository } from 'typeorm';
 import { Payment } from '../models/payment.model';
 import { AppDataSource } from '../config/dbConfig';
-import { PaymentDto } from '../interfaces/payment.INTF';
+import { IPayment, PaymentDto } from '../interfaces/payment.INTF';
+import { AppError } from '../utils/appError';
 
 export class PaymentService {
     private readonly paymentRepo: Repository<Payment>
@@ -67,6 +68,29 @@ export class PaymentService {
             jsonResponse: JSON.parse(body as string),
             httpStatusCode: httpResponse.statusCode,
         };
+    }
+    async getPayment(id: number) {
+        let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
+        if (!payment) throw new AppError("payment not found", 404)
+        return payment
+    }
+    async getAllPayments() {
+        let payments: IPayment[] | [] = await this.paymentRepo.find()
+        if (!payments.length) throw new AppError("Out Of Payments", 404)
+        return payments
+    }
+    async updatePayment(paymentData: PaymentDto, id: number) {
+        let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
+        if (!payment) throw new AppError("payment not found", 404)
+        Object.assign(payment, paymentData)
+        payment = await this.paymentRepo.save(payment)
+        return payment
+
+    }
+    async deletePayment(id: number) {
+        let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
+        if (!payment) throw new AppError("payment not found", 404);
+        await this.paymentRepo.delete(id)
     }
 
 
