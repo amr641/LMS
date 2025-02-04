@@ -3,7 +3,7 @@ import { AppDataSource } from "../config/dbConfig";
 import { Category } from "../models/category.model";
 import { AppError } from "../utils/appError";
 
-export const validateCategoryExists = async (
+ const validateCategoryExists = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -17,3 +17,8 @@ export const validateCategoryExists = async (
 
     next();
 };
+
+
+export {
+    validateCategoryExists
+}

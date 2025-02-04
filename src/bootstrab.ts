@@ -5,6 +5,7 @@ import 'dotenv/config'
 import { categoryRouter } from "./routes/category.routes";
 import { courseRouter } from "./routes/course.routes";
 import { userRouter } from "./routes/user.routes";
+import { enrollementRouter } from "./routes/enrollment.routes";
 export function bootstrab(app: Express) {
     process.on("uncaughtException", (err: Error) => {
         console.error("Uncaught Exception:", err);
@@ -15,6 +16,7 @@ export function bootstrab(app: Express) {
     app.use(`${baseUrl}/categories`, categoryRouter)
     app.use(`${baseUrl}`, courseRouter)
     app.use(`${baseUrl}/users`, userRouter)
+    app.use(`${baseUrl}/enrollments`, enrollementRouter)
 
     // global err handeling midlleware
     app.use(globalHandeling)

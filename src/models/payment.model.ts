@@ -16,8 +16,8 @@ export class Payment extends BaseEntity implements IPayment {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ type: "varchar", length: 45 })
-    amount!: string;
+    @Column({ type: "float"})
+    amount!: number;
 
     @Column({ type: "enum", enum: PaymentStatus, default: PaymentStatus.PENDING })
     status!: PaymentStatus
@@ -25,7 +25,7 @@ export class Payment extends BaseEntity implements IPayment {
     @Column({
         type: "enum",
         enum: PaymentMethods, 
-        default: PaymentMethods.OTHERS, 
+        default: PaymentMethods.CREDIT, 
     })
     method!: PaymentMethods; 
     @ManyToOne(() => User, (user) => user.id)

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/verifiyToken";
 import { CourseController } from "../controllers/course.controller";
-import { validateCategoryExists } from "../middlewares/validateCategoryExists";
+import { validateCategoryExists } from "../middlewares/validateExistence";
 import { allowedTo, authorizeInstructor } from "../middlewares/authorization";
 import { Roles } from "../enums/roles.enum";
 

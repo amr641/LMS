@@ -3,6 +3,9 @@ import { DataSource } from "typeorm"
 import { User } from "../models/user.model";
 import { Category } from "../models/category.model";
 import { Course } from "../models/course.model";
+import { Payment } from "../models/payment.model";
+import { Enrollment } from "../models/enrollment.model";
+
 export const AppDataSource =
     new DataSource({
         type: "mysql",
@@ -11,9 +14,10 @@ export const AppDataSource =
         username: "root",
         password: "",
         database: "lms",
-        entities: [User,Category,Course],
+        entities: [User,Category,Course,Payment,Enrollment],
+        migrations:["src/migrations"],
         synchronize: true,
-        logging: false,
+        logging: true,
     });
 class DBconnection {
 
