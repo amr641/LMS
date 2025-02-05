@@ -12,12 +12,10 @@ import { ResetPasswordDTO } from "../../types/auth.types"
 
 export class AuthService {
     private readonly userRepo: Repository<User>
-    
+
     constructor() {
         this.userRepo = AppDataSource.getRepository(User);
     }
-
-
     async register(userData: IUser) {
         let user: User | null = await this.userRepo.findOneBy({ email: userData.email })
         if (user) throw new AppError("user already exist", 400)
@@ -41,34 +39,22 @@ export class AuthService {
         return this.generateToken(user.id, user.email, user.phone, user.role)
 
     }
+    
     async resetPassword(resetData: ResetPasswordDTO) {
-        // let user: IUser | null = await this.userRepo.findOne({ where: { id: resetData.userId } });
-
-        // if (!user) throw new AppError("user not found", 404)
-        // //to avoid blocking the main thread
-        // const matched = await bcrypt.compare(resetData.oldPassword, user.password);
-        // if (!matched) throw new AppError("incorrect old password", 401)
-        // const [newPassword, token] = await Promise.all([
-        //     await bcrypt.hash(resetData.newPassword, 10),
-        //     this.generateToken(user.id, user.email, user.phone, user.role)
-        // ])
-
-        // await this.userRepo.update(user.id, { password: newPassword })
-        // return token
         let user: IUser | null = await this.userRepo.findOne({ where: { id: resetData.userId } });
 
         if (!user) throw new AppError("user not found", 404)
-        const matched = await new Promise<boolean>((resolve) => { //to avoid blocking the main thread
-            setImmediate(async () => {
-                const result = await bcrypt.compare(resetData.oldPassword, user.password);
-                resolve(result);
-            });
-        });
-
+        //to avoid blocking the main thread
+        const matched = await bcrypt.compare(resetData.oldPassword, user.password);
         if (!matched) throw new AppError("incorrect old password", 401)
-        let newPassword = await bcrypt.hash(resetData.newPassword, 10)
+        const [newPassword, token] = await Promise.all([
+            await bcrypt.hash(resetData.newPassword, 10),
+            this.generateToken(user.id, user.email, user.phone, user.role)
+        ])
+
         await this.userRepo.update(user.id, { password: newPassword })
-        return this.generateToken(user.id, user.email, user.phone, user.role)
+        return token
+
 
     }
 

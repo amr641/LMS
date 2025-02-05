@@ -1,10 +1,17 @@
-export interface IMaterial {
+ interface IMaterial {
     id: number;
     title: string;
-    description?: string; // Optional description for the material
-    file: string; // URL or file path to the material
+    description?: string;
+    file: string; 
     course:number;
     createdAt: Date;
     updatedAt: Date;
   }
   
+ interface MaterialDTO {
+    title: string;
+    description?: string; 
+    file: string; 
+    course?:number;
+  }
+  export {IMaterial,MaterialDTO}

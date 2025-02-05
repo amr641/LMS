@@ -5,6 +5,7 @@ import { Category } from "../models/category.model";
 import { Course } from "../models/course.model";
 import { Payment } from "../models/payment.model";
 import { Enrollment } from "../models/enrollment.model";
+import { Material } from "../models/materials.mode";
 
 export const AppDataSource =
     new DataSource({
@@ -14,7 +15,7 @@ export const AppDataSource =
         username: "root",
         password: "",
         database: "lms",
-        entities: [User,Category,Course,Payment,Enrollment],
+        entities: [User,Category,Course,Payment,Enrollment,Material],
         migrations:["src/migrations"],
         synchronize: false,
         logging: false,

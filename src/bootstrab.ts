@@ -7,6 +7,7 @@ import { courseRouter } from "./routes/course.routes";
 import { userRouter } from "./routes/user.routes";
 import { enrollementRouter } from "./routes/enrollment.routes";
 import { paymentRouter } from "./routes/payment.routes";
+import { materialRouter } from "./routes/material.routes";
 export function bootstrab(app: Express) {
     process.on("uncaughtException", (err: Error) => {
         console.error("Uncaught Exception:", err);
@@ -19,6 +20,7 @@ export function bootstrab(app: Express) {
     app.use(`${baseUrl}/users`, userRouter)
     app.use(`${baseUrl}/enrollments`, enrollementRouter)
     app.use(`${baseUrl}/payments`, paymentRouter)
+    app.use(`${baseUrl}/materials`, materialRouter)
 
     // global err handeling midlleware
     app.use(globalHandeling)

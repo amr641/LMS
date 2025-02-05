@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  OneToOne
+  OneToOne,
+  JoinColumn
 } from "typeorm";
 import { IMaterial } from "../interfaces/materials.INTF";
 import { Course } from "./course.model";
@@ -17,6 +18,7 @@ export class Material extends BaseEntity implements IMaterial {
 
   @Column({ type: "varchar", length: 45 })
   title!: string;
+  @JoinColumn({name:"course"})
   @OneToOne(() => Course, (course) => course.id)
   course!: number;
   @Column({ type: "varchar", length: 45, nullable: true })

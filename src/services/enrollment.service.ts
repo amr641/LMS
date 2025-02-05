@@ -6,7 +6,6 @@ import { PaymentService } from "./payment.service";
 import { CourseService } from "./course.service";
 import { AppError } from "../utils/appError";
 import { Enrollment } from "../models/enrollment.model";
-
 export class EnrollmentServices {
     private readonly enrollementRepo: Repository<Enrollment>;
     private paymentServices: PaymentService;
