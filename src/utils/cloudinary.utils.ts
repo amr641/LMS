@@ -1,6 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import streamifier from 'streamifier';
-
 import "dotenv/config"
 import { AppError } from "./appError";
 
@@ -15,7 +13,7 @@ export class CloudUploader {
     async uploadToCloudinary(fileBuffer: string): Promise<string> {
         return new Promise((resolve, reject) => {
             let upload_stream = cloudinary.uploader.upload_stream(
-                { resource_type: "raw"}, 
+                { resource_type: "raw" },
                 (error, result) => {
                     if (error) {
                         return reject(new AppError('Cloudinary upload error', 500)); // Reject with custom error
@@ -29,28 +27,22 @@ export class CloudUploader {
             upload_stream.end(fileBuffer)
         })
     };
-    async removeOldImage(url: string) {
+    async removeOldFile(url: string) {
         try {
-            // Extract public ID from the URL
-
-            const publicId = url.split("/").pop()?.split(".")[0] || undefined;
-
+            const segments = url.split('/');
+            const publicId = segments[segments.length - 1].split('.')[0];
             let result;
-            if (publicId) result = await cloudinary.uploader.destroy(publicId);
-
-
-            // Call Cloudinary's destroy method to delete the image
+            if (publicId) result = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
 
             if (result.result === 'ok') {
-                console.log('Image deleted successfully');
-                return { message: 'Image deleted successfully' };
+                console.log('File deleted successfully');
             } else {
-                console.log('Error deleting image:', result);
-                return { message: 'Error deleting image', error: result };
+                throw new AppError('Error deleting image', 400)
+
             }
         } catch (error) {
-            console.error('Error deleting image:', error);
-            return { message: 'Error deleting image', error };
+            throw new AppError('Error deleting image', 400)
+
         }
     }
 }

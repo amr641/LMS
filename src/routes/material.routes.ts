@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { MaterialController } from "../controllers/materials.controller";
 import fileUpload from 'express-fileupload';
-import { allowedTo } from "../middlewares/authorization";
+import { allowedTo, authorizeStudent } from "../middlewares/authorization";
 import { Roles } from "../enums/roles.enum";
 import { verifyToken } from "../middlewares/verifiyToken";
 
@@ -11,11 +11,12 @@ const materialController = new MaterialController()
 materialRouter
     .use(fileUpload({ useTempFiles: false }))
     .use(verifyToken)
-    .post("/", materialController.addMaterials.bind(materialController))
-    .get("/", materialController.getAllMaterials.bind(materialController))
-    .get("/course/:courseId", materialController.getCourseMaterials.bind(materialController))
+    .post("/", allowedTo(Roles.INSTRUCTOR), materialController.addMaterials.bind(materialController))
+    .get("/", allowedTo(Roles.ADMIN), materialController.getAllMaterials.bind(materialController))
+    .get("/course/:courseId", allowedTo(Roles.ADMIN, Roles.STUDENT), authorizeStudent, materialController.getCourseMaterials.bind(materialController))
 
     .route("/:id")
-    .get(materialController.getMaterial.bind(materialController))
-    .patch(materialController.updateMaterial.bind(materialController))
-    .delete(materialController.deleteMaterial.bind(materialController))
+    .get(allowedTo(Roles.ADMIN), materialController.getMaterial.bind(materialController))
+    .patch(allowedTo(Roles.INSTRUCTOR), materialController.updateMaterial.bind(materialController))
+    .delete(allowedTo(Roles.ADMIN), materialController.deleteMaterial.bind(materialController));
+    

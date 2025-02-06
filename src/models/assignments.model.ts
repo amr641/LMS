@@ -14,13 +14,10 @@ import { Course } from "./course.model";
 export class Assignment extends BaseEntity implements IAssignment {
   @PrimaryGeneratedColumn()
   id!: number;
-
   @Column({ type: "varchar", length: 45 })
   title!: string;
-
-  @Column({ type: "varchar", length: 45 })
+  @Column({ type: "varchar", length: 255 })
   description!: string;
-
   @Column({ type: "date" })
   dueDate!: Date;
   @ManyToOne(() => Course, (course) => course.id)

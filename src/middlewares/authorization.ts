@@ -1,13 +1,16 @@
 import { NextFunction, Request, Response } from "express"
 import { AppError } from "../utils/appError"
 import { Roles } from "../enums/roles.enum"
-import { ICourse } from "../interfaces/course.INTF"
 import { AppDataSource } from "../config/dbConfig"
 import { Course } from "../models/course.model"
-import { User } from "../models/user.model"
 import { IUser } from "../interfaces/user.INTF"
+import { UserService } from "../services/user.service"
+import { Enrollment } from "../models/enrollment.model"
+import { PaymentStatus } from "../enums/payment.status"
 const courseRepo = AppDataSource.getRepository(Course);
-const userRepo = AppDataSource.getRepository(User)
+const enrollmentRepo = AppDataSource.getRepository(Enrollment)
+const userServices = new UserService();
+
 
 const allowedTo = function (...roles: string[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -37,9 +40,26 @@ const authorizeInstructor = async (req: Request, res: Response, next: NextFuncti
 
 const restrictAdminActions = async (req: Request, res: Response, next: NextFunction) => {
   let { id } = req.params
-  let user: IUser | null = await userRepo.findOne({ where: { id: Number(id) } })
+  let user: IUser | null = await userServices.getUser(Number(id))
   if (!user) throw new AppError("user not found", 404)
 
   return user.role == Roles.ADMIN ? next(new AppError("You Are Not Authorized", 403)) : next()
 }
-export { allowedTo, authorizeInstructor, restrictAdminActions }
+
+const authorizeStudent = async (req: Request, res: Response, next: NextFunction) => {
+  if(req.user?.role==Roles.ADMIN){
+    return next()
+  }
+  let { courseId } = req.params
+  let studentId = Number(req.user?.id)
+  // only students who complete the Enrollment condtions can access the course material
+  let enrollment = await enrollmentRepo.findOne({ where: { course: Number(courseId), student: studentId, paymentStatus: PaymentStatus.PAID } })
+  if (!enrollment) throw new AppError("You Are Not Authorized", 401)
+  next()
+}
+export {
+  allowedTo,
+  authorizeInstructor,
+  restrictAdminActions,
+  authorizeStudent
+}

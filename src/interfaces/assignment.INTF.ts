@@ -1,4 +1,4 @@
-export interface IAssignment {
+ interface IAssignment {
     id: number;
     title: string;
     description: string;
@@ -7,4 +7,11 @@ export interface IAssignment {
     createdAt: Date;
     updatedAt: Date;
   }
+ interface AssignmentDTO {
+    title?: string;
+    description?: string;
+    course?:number
+    dueDate?: Date;
+  }
+  export {IAssignment,AssignmentDTO}
   
