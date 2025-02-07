@@ -15,12 +15,12 @@ export class UserService {
         return users
     }
     async getUser(id: number) {
-        let user: IUser | null = await this.userRepo.findOne({ where: { id }, })
+        let user: IUser | null = await this.userRepo.findOne({ where: { id }, select: ["name", "email", "phone", "role"] })
         if (!user) throw new AppError("User Not Found", 404)
         return user
     }
     async updateUser(userData: UserDTO) {
-        let user: IUser | null = await this.userRepo.findOne({ where: { id: userData.id }, select: ["name", "email", "phone", "role"] })
+        let user = await this.getUser(userData.id)
         if (!user) throw new AppError("User Not Found", 404)
 
         Object.assign(user, userData)
@@ -30,6 +30,7 @@ export class UserService {
     }
 
     async deleteUser(id: number) {
+        let user = await this.getUser(id)
         await this.userRepo.delete(id)
     }
 }

@@ -16,8 +16,8 @@
 
   interface CourseDTO {
     id?:number
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
     instructorId?: number;
     categoryId?: number;
     level: string;

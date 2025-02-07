@@ -80,16 +80,15 @@ export class PaymentService {
         return payments
     }
     async updatePayment(paymentData: PaymentDto, id: number) {
-        let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
-        if (!payment) throw new AppError("payment not found", 404)
+        let payment = await this.getPayment(id)
         Object.assign(payment, paymentData)
         payment = await this.paymentRepo.save(payment)
         return payment
 
     }
     async deletePayment(id: number) {
-        let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
-        if (!payment) throw new AppError("payment not found", 404);
+        await this.getPayment(id)
+
         await this.paymentRepo.delete(id)
     }
 

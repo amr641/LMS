@@ -43,10 +43,10 @@ export class CourseController {
 
     }
     async updateCourse(req: Request, res: Response) {
+        let { id } = req.params
         let course: ICourse = await this.courseServices.updateCourse({
-            id: Number(req.params.id),
             ...req.body
-        })
+        }, Number(id))
         res.status(201).json({ message, course })
     }
 }

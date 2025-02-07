@@ -6,7 +6,7 @@ import { AppError } from "../utils/appError";
 
 
 export class CourseService {
-private readonly courseRepo: Repository<Course>
+    private readonly courseRepo: Repository<Course>
     constructor() {
         this.courseRepo = AppDataSource.getRepository(Course)
     }
@@ -27,18 +27,18 @@ private readonly courseRepo: Repository<Course>
         if (!course) throw new AppError("course not found", 404)
         return course
     }
-    async updateCourse(courseData: CourseDTO) {
-        let course: ICourse | null = await this.courseRepo.findOne({ where: { id: courseData.id } })
-        if (!course) throw new AppError("course not found", 404)
+    async updateCourse(courseData: CourseDTO, id: number) {
+        let course: ICourse | null = await this.getCourse(id)
         Object.assign(course, courseData)
         course = await this.courseRepo.save(course)
         return course
     }
 
     async deleteCourse(id: number) {
-    
-     await this.courseRepo.delete(id)
-   
+        let course: ICourse | null = await this.getCourse(id)
+
+        await this.courseRepo.delete(course.id)
+
     }
 
     async getCategoryCourses(categoryId: number) {
@@ -55,8 +55,8 @@ private readonly courseRepo: Repository<Course>
                 }
             }
         )
-        if(!course) throw new AppError("course not found",404)
-            return course
+        if (!course) throw new AppError("course not found", 404)
+        return course
     }
 
 }

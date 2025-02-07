@@ -33,7 +33,7 @@ export class CategoryService {
     }
     async deletecategory (id:number){
         let category = await this.categoryRepo.findOne({ where: {id} });
-        if (!category) throw new AppError("category not found", 404);
+
        await this.categoryRepo.delete(id);
   
     }

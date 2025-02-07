@@ -12,8 +12,8 @@ import { DecodedToken } from "../../types/DecodedToken";
 
 
 export class OAuthGoogleService {
-    private userRepo: Repository<User>
-    private authService: AuthService
+    private readonly userRepo: Repository<User>
+    private readonly authService: AuthService
     constructor() {
         this.userRepo = AppDataSource.getRepository(User);
         this.initializeGoogleStrategy();
@@ -58,7 +58,8 @@ export class OAuthGoogleService {
             if (!user) {
                 user = this.userRepo.create({
                     email: decode.email,
-                    phone: Number(decode.phone)
+                    phone: Number(decode.phone),
+
 
                 })
                 await this.userRepo.save(user)

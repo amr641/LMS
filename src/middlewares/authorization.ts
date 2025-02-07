@@ -52,7 +52,7 @@ const authorizeStudent = async (req: Request, res: Response, next: NextFunction)
   }
   let { courseId } = req.params
   let studentId = Number(req.user?.id)
-  // only students who complete the Enrollment condtions can access the course material
+  // only students who complete the Enrollment condtions can access the course material and assignments
   let enrollment = await enrollmentRepo.findOne({ where: { course: Number(courseId), student: studentId, paymentStatus: PaymentStatus.PAID } })
   if (!enrollment) throw new AppError("You Are Not Authorized", 401)
   next()

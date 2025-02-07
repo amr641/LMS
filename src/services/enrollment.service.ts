@@ -25,8 +25,8 @@ export class EnrollmentServices {
             description: course.description,
             user: enrollmentData.student
         })
-     
-        
+
+
         let enrollment = this.enrollementRepo.create({
             course: course.id,
             courseTitle: course.title,
@@ -43,7 +43,7 @@ export class EnrollmentServices {
     async getEnrollment(id: number) {
         let enrollment: IEnrollment | null = await this.enrollementRepo.findOne({ where: { id } })
         if (!enrollment) throw new AppError("enrollment not found", 404)
-            
+
         return enrollment
     }
     async getAllEnrollments() {
@@ -51,17 +51,15 @@ export class EnrollmentServices {
         if (!enrollments.length) throw new AppError("Out Of Enrollments", 404)
         return enrollments
     }
-    async updateEnrollment(enrollmentData: EnrollmentDTO,id:number) {
-        let enrollment = await this.enrollementRepo.findOne({ where: { id }})
-        if (!enrollment) throw new AppError("enrollment not found", 404)
-        Object.assign(enrollment,enrollmentData)
+    async updateEnrollment(enrollmentData: EnrollmentDTO, id: number) {
+        let enrollment = await this.getEnrollment(id)
+        Object.assign(enrollment, enrollmentData)
         enrollment = await this.enrollementRepo.save(enrollment)
         return enrollment
 
     }
     async deleteEnrollment(id: number) {
-        let enrollment = await this.enrollementRepo.findOne({ where: { id } })
-        if (!enrollment) throw new AppError("enrollment not found", 404)
+        let enrollment = await this.getEnrollment(id)
         await this.enrollementRepo.delete(enrollment.id)
     }
 }

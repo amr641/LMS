@@ -40,35 +40,33 @@ export class AssignmentServices {
     }
 
     async getCourseAssignments(courseId: number) {
-          
+
         let assignments: IAssignment[] = await this.assignmentRepo
-        .createQueryBuilder("assignment")
-        .innerJoin("assignment.course", "course")  // This refers to the "course" relation
-        .where("course.id = :courseId", { courseId })
-        .getMany();
+            .createQueryBuilder("assignment")
+            .innerJoin("assignment.course", "course")  // This refers to the "course" relation
+            .where("course.id = :courseId", { courseId })
+            .getMany();
 
         if (!assignments.length) throw new AppError("No Assignments provided for this course", 404)
         return assignments
     }
 
     async updateAssignment(id: number, assignmentData: AssignmentDTO) {
-        let assignment: IAssignment | null = await this.assignmentRepo.findOne({ where: { id } });
-        if (!assignment) throw new AppError("Assignment Not Found", 404)
+        let assignment: IAssignment | null = await this.getAssignment(id);
         if (assignmentData.description) { // if user provide a file
             await this.uploader.removeOldFile(assignment.description) // remove the old image
             // Modeify the old one with the new image
             assignmentData.description = await this.uploader.uploadToCloudinary(assignmentData.description)
         }
-        
+
         Object.assign(assignment, assignmentData)
         assignment = await this.assignmentRepo.save(assignment)
         return assignment
     }
 
     async deleteAssignment(id: number) {
-        let assignment: IAssignment | null = await this.assignmentRepo.findOne({ where: { id } });
-        if (!assignment) throw new AppError("Assignment Not Found", 404)
-            await this.uploader.removeOldFile(assignment.description)
+        let assignment: IAssignment | null = await this.getAssignment(id);
+        await this.uploader.removeOldFile(assignment.description)
         await this.assignmentRepo.delete(id)
     }
 }

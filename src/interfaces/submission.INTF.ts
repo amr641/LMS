@@ -1,8 +1,6 @@
-export interface ISubmission {
+ interface ISubmission {
     id: number;
-    userId?: number;  
-    courseId?: number;
-    user:number;
+    student:number;
     submissionDate: Date;
     assignment:number;
     file: string; 
@@ -11,3 +9,12 @@ export interface ISubmission {
     updatedAt: Date;
   }
   
+ interface SubmissionDTO {
+    student?:number;
+    submissionDate?: Date;
+    assignment?:number;
+    file?: string; 
+    grade?: number;  
+  }
+  
+  export{ISubmission,SubmissionDTO}

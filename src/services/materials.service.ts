@@ -41,8 +41,7 @@ export class MaterialServices {
         return materials
     }
     async updateMaterials(materialData: MaterialDTO, id: number) {
-        let material: IMaterial | null = await this.materialRepo.findOne({ where: { id } })
-        if (!material) throw new AppError("material not found", 404)
+        let material = await this.getMaterial(id)
         if (materialData.file) {
             await this.uploader.removeOldFile(material.file) // remove the old file
             materialData.file = await this.uploader.uploadToCloudinary(materialData.file)
@@ -52,8 +51,7 @@ export class MaterialServices {
         return material
     }
     async deleteMaterial(id: number) {
-        let material: IMaterial | null = await this.materialRepo.findOne({ where: { id } })
-        if (!material) throw new AppError("material not found", 404)
+        let material = await this.getMaterial(id)
         await this.uploader.removeOldFile(material.file)
         await this.materialRepo.delete(id)
     }
