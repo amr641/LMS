@@ -4,7 +4,7 @@
         interface Request {
             user?: {
                 id: number;
-                name: string;
+                name: string|undefined;
                 iat: number;
                 role: Roles;
                 email:string;

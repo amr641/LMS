@@ -4,12 +4,15 @@ import { CourseController } from "../controllers/course.controller";
 import { validateCategoryExists } from "../middlewares/validateExistence";
 import { allowedTo, authorizeInstructor } from "../middlewares/authorization";
 import { Roles } from "../enums/roles.enum";
+import { Certificate } from "../controllers/certificate.controller";
 
 export const courseRouter = Router()
-const courseController = new CourseController()
+const courseController = new CourseController();
+const certificates = new Certificate();
 courseRouter.use(verifyToken)
     .get("/courses", courseController.getAllCourses.bind(courseController))
     .get("/courses/:id", courseController.getCourse.bind(courseController))
+    .get("/courses/:id/get-certificate", certificates.getMyCertificate.bind(certificates))
 
 
     .post("/courses", allowedTo(Roles.INSTRUCTOR), validateCategoryExists, courseController.createCourse.bind(courseController))
