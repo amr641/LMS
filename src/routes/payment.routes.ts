@@ -7,9 +7,11 @@ import { Roles } from "../enums/roles.enum";
 export const paymentRouter = Router()
 const paymnetController = new PaymentController()
 paymentRouter
-    .use(verifyToken, allowedTo(Roles.ADMIN))
+    // .use(verifyToken)
 
     .get("/", paymnetController.getAllPayments.bind(paymnetController))
+    .post("/", paymnetController.createPayment.bind(paymnetController))
+    .get("/success/:userId", paymnetController.handelSuccess.bind(paymnetController))
 
     .route("/:id")
 

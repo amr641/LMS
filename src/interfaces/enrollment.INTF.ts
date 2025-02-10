@@ -16,12 +16,12 @@ interface IEnrollment {
 interface EnrollmentDTO {
   id?:number;
   courseId: number;
-  enrollmentDate: Date;
-  status: Status;
-  student: number
-  paymentStatus: PaymentStatus;
-  courseTitle: string;
-  coursePrice: number;
+  enrollmentDate?: Date;
+  status?: Status;
+  student?: number
+  paymentStatus?: PaymentStatus;
+  courseTitle?: string;
+  coursePrice?: number;
 }
 
 export { IEnrollment, EnrollmentDTO }

@@ -10,7 +10,9 @@ export class EnrollmentController {
     async createEnrollment(req: Request, res: Response) {
         let enrollment = await this.enrollmentServices.createEnrollment({
             student: Number(req.user?.id),
+            enrollmentDate: new Date(req.body.enrollmentDate),
             ...req.body
+ 
         })
 
 
@@ -29,7 +31,7 @@ export class EnrollmentController {
     }
     async updateEnrollment(req: Request, res: Response) {
         let { id } = req.params
-        let enrollment = await this.enrollmentServices.updateEnrollment({...req.body}, Number(id))
+        let enrollment = await this.enrollmentServices.updateEnrollment({ ...req.body }, Number(id))
         res.status(201).json({ message, enrollment })
     }
     async deleteEnrollment(req: Request, res: Response) {

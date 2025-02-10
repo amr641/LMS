@@ -34,7 +34,7 @@ export function generateCertificate(userName: string, courseName: string): Promi
 
     // Signature Placeholder
     doc.moveDown(4).fontSize(14);
-    doc.text("LMS-AMR", 600, 500, { align: "left" });
+    doc.text("LMS", 600, 500, { align: "left" });
     doc.moveTo(600, 495).lineTo(750, 495).strokeColor("#333").stroke();
 
     // Finalize

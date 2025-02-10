@@ -19,4 +19,9 @@ interface PaymentDto {
     status?: PaymentStatus; // Payment status
     method?: PaymentMethods;// Payment method
 }
-export {IPayment,PaymentDto}
+
+interface successPayment {
+    description?: string;
+    user:number;
+}
+export {IPayment,PaymentDto,successPayment}

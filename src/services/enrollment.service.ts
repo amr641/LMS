@@ -20,12 +20,6 @@ export class EnrollmentServices {
 
     async createEnrollment(enrollmentData: EnrollmentDTO) {
         let course = await this.courseServices.getCourse(enrollmentData.courseId)
-        await this.paymentServices.createOrder({
-            amount: course.price ? Number(course.price) : 0,
-            description: course.description,
-            user: enrollmentData.student
-        })
-
 
         let enrollment = this.enrollementRepo.create({
             course: course.id,
