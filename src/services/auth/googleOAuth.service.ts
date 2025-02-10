@@ -25,7 +25,7 @@ export class OAuthGoogleService {
                 {
                     clientID: process.env.GOOGLE_CLIENT_ID as string,
                     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-                    callbackURL: "http://localhost:3000/api/v1/auth/google/callback",
+                    callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
                 },
                 (accessToken, refreshToken, profile: any, done) => {
                     const email = profile.emails?.[0]?.value;

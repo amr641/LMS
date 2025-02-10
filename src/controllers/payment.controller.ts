@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PaymentService } from "../services/payment.service";
 import { CourseService } from "../services/course.service";
 const message = "success"
+
 export class PaymentController {
     private readonly paymentServices: PaymentService
     private readonly courseServices: CourseService
@@ -19,7 +20,7 @@ export class PaymentController {
             amount: isCourse.price ? isCourse.price : 0,
             user: Number(user)
         })
-        res.status(200).json(url)
+        res.status(200).json({url})
     }
     async getPayment(req: Request, res: Response) {
         let { id } = req.params
@@ -41,6 +42,12 @@ export class PaymentController {
         let { title } = req.query
         let payment = await this.paymentServices.handleSuccess({ user: Number(userId), description: title as string })
         res.status(200).json({ message: "success", payment })
+    }
+    async handleCanceledPayment(req: Request, res: Response) {
+        let { userId } = req.params
+        let { title } = req.query
+     let payment=    await this.paymentServices.handleCancel({ user: Number(userId), description: title as string })
+        res.status(201).json({ message: "Payment Canceled" ,payment})
     }
     async deletePayment(req: Request, res: Response) {
         let { id } = req.params

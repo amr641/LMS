@@ -7,6 +7,7 @@ import { Submission } from "../models/submission.model";
 import { Assignment } from "../models/assignments.model";
 import { Payment } from "../models/payment.model";
 import { CourseService } from "../services/course.service";
+import { PaymentStatus } from "../enums/payment.status";
 const courseServices = new CourseService()
 const SubmissionRepo = AppDataSource.getRepository(Submission);
 const assignmentRepo = AppDataSource.getRepository(Assignment)
@@ -48,13 +49,26 @@ const isUserPaid = async (
     next: NextFunction
 ) => {
     let user = Number(req.user?.id);
-    let courseId = Number(req.body.course)
-    let course = await courseServices.getCourse(courseId)
+    let courseId = Number(req.body.course);
+    let course = await courseServices.getCourse(courseId);
     let payment = await AppDataSource.getRepository(Payment).createQueryBuilder("payment")
         .where("payment.user = :user", { user })
         .andWhere("payment.description = :description", { description: course.title })
+        .andWhere("payment.status = :status", { status: PaymentStatus.PAID })
         .getOne();
     if (!payment) throw new AppError("You Have To Pay First", 401)
+    next()
+}
+const isPaidBefore = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    let user = Number(req.user?.id);
+    let courseId = Number(req.body.course);
+    let course = await courseServices.getCourse(courseId);
+    let payment = await AppDataSource.getRepository(Payment).findOne({ where: { user, description: course.title } })
+    if (payment) throw new AppError("You Already Paid", 401)
     next()
 }
 
@@ -62,5 +76,6 @@ const isUserPaid = async (
 export {
     validateCategoryExists,
     isSubmissionAllowed,
-    isUserPaid
+    isUserPaid,
+    isPaidBefore
 }

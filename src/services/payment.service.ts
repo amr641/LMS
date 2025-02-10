@@ -56,24 +56,21 @@ export class PaymentService {
                     },
                 ],
                 applicationContext: {
-                    returnUrl: `${process.env.BASE_URL}/payments/success/${paymentData.user}?title=${encodeURIComponent(paymentData.description as string
-                    )}`,
-                    cancelUrl: `${process.env.BASE_URL}/payments/cancel`,
+                    returnUrl: `${process.env.BASE_URL}/payments/success/${paymentData.user}?title=${encodeURIComponent(paymentData.description as string)}`,
+                    cancelUrl: `${process.env.BASE_URL}/payments/cancel/${paymentData.user}?title=${encodeURIComponent(paymentData.description as string)}`,
                 },
             },
             prefer: "return=minimal",
         };
 
-        const { body, ...httpResponse } = await ordersController.ordersCreate(orderDetails);
-        let payment = this.paymentRepo.create({
+        const { body } = await ordersController.ordersCreate(orderDetails);
+        var payment = this.paymentRepo.create({
             amount: paymentData.amount,
             user: paymentData.user,
             description: paymentData.description
         })
-        await this.paymentRepo.save(payment)
+        payment = await this.paymentRepo.save(payment)
         let bodyParesd: any = JSON.parse(body as string)
-        console.log(bodyParesd.links[1]?.href);
-        
         return bodyParesd.links[1]?.href
 
     }
@@ -85,18 +82,27 @@ export class PaymentService {
     }
     async handleSuccess(successData: successPayment) {
         let payment = await this.paymentRepo.createQueryBuilder("payment")
-        .where("payment.user = :user", { user: successData.user })
-        .andWhere("payment.description = :description", { description: successData.description })
-        .getOne();
-    console.log();
-    
-        
-        if (!payment) throw new AppError("Failed getting the payment", 500);
-        Object.assign(payment,{status:PaymentStatus.PAID})
-      payment=   await this.paymentRepo.save(payment)
-      return payment
+            .where("payment.user = :user", { user: successData.user })
+            .andWhere("payment.description = :description", { description: successData.description })
+            .getOne();
+
+        if (!payment) throw new AppError("Error Getting The Payment", 500);
+        Object.assign(payment, { status: PaymentStatus.PAID })
+        payment = await this.paymentRepo.save(payment)
+        return payment
     }
-  
+    async handleCancel(cancelData: successPayment) {
+        let payment = await this.paymentRepo.createQueryBuilder("payment")
+            .where("payment.user = :user", { user: cancelData.user })
+            .andWhere("payment.description = :description", { description: cancelData.description })
+            .getOne();
+
+        if (!payment) throw new AppError("Error Getting The Payment", 500);
+        Object.assign(payment, { status: PaymentStatus.CANCELED })
+        payment = await this.paymentRepo.save(payment)
+        return payment
+    }
+
     async getAllPayments() {
         let payments: IPayment[] | [] = await this.paymentRepo.find()
         if (!payments.length) throw new AppError("Out Of Payments", 404)
