@@ -1,12 +1,12 @@
 import { Roles } from "../enums/roles.enum";
 
  interface IUser {
-    id: number; 
+    id?: number; 
     name: string; 
     email: string; 
-    password: string; 
+    password?: string; 
     role: Roles; 
-    DOB: Date; 
+    DOB?: Date; 
     phone:number;
     createdAt?: Date; 
     updatedAt?: Date; 
@@ -20,5 +20,12 @@ import { Roles } from "../enums/roles.enum";
     DOB: Date; 
     phone:number;
   }
+  interface MockUsers {
 
-  export {IUser,UserDTO}
+    name: string; 
+    email: string; 
+    role: Roles; 
+    phone:number;
+  }
+
+  export {IUser,UserDTO,MockUsers}

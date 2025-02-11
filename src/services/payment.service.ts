@@ -1,5 +1,5 @@
 import {
-    ApiError,
+
     CheckoutPaymentIntent,
     Client, Environment, LogLevel,
 
@@ -11,11 +11,7 @@ import { Payment } from '../models/payment.model';
 import { AppDataSource } from '../config/dbConfig';
 import { IPayment, PaymentDto, successPayment } from '../interfaces/payment.INTF';
 import { AppError } from '../utils/appError';
-import { OrdersCaptureRequest } from '@paypal/checkout-server-sdk/lib/orders/lib';
-import axios from 'axios';
-import { Status } from '../enums/enrollment.status';
 import { PaymentStatus } from '../enums/payment.status';
-import { object } from 'joi';
 
 export class PaymentService {
     private readonly paymentRepo: Repository<Payment>

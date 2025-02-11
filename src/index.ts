@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import express from 'express';
 import dbConnection from "./config/dbConfig";
-const app = express();
+export const app = express();
 const port = 3000;
 import { bootstrab } from './bootstrab';
 import "dotenv/config"

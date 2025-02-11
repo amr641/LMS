@@ -3,13 +3,13 @@ import { PaymentStatus } from "../enums/payment.status";
 
  interface IPayment {
     id: number;
-    amount: number; // Store as string to accommodate different formats (e.g., currency)
-    status: PaymentStatus; // Payment status
-    method: PaymentMethods;// Payment method
+    amount: number; 
+    status: PaymentStatus; 
+    method: PaymentMethods;
     user: number;
-    description?: string; // Optional description for the payment
-    createdAt: Date; // Date the payment was made
-    updatedAt: Date; // Date the payment was last updated
+    description?: string; 
+    createdAt: Date; 
+    updatedAt: Date; 
 }
 
 interface PaymentDto {
