@@ -6,11 +6,12 @@ import { AppError } from "../utils/appError";
 import { CloudUploader } from "../utils/cloudinary.utils";
 
 export class AssignmentServices {
-      public assignmentRepo: Repository<Assignment>
-     public uploader: CloudUploader
-    constructor() {
-        this.assignmentRepo = AppDataSource.getRepository(Assignment)
-        this.uploader = new CloudUploader()
+    private assignmentRepo: Repository<Assignment>;
+    private uploader: CloudUploader;
+
+    constructor(assignmentRepo?: Repository<Assignment>, cloudUploader?: CloudUploader) {
+        this.assignmentRepo = AppDataSource.getRepository(Assignment) || assignmentRepo
+        this.uploader = cloudUploader || new CloudUploader()
     }
 
     async addAssignment(assignmentData: AssignmentDTO) {

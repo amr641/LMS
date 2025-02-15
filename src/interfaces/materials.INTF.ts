@@ -3,7 +3,7 @@
     title: string;
     description?: string;
     file: string; 
-    course:number;
+    course?:number;
     createdAt: Date;
     updatedAt: Date;
   }

@@ -6,11 +6,11 @@ import { CloudUploader } from "../utils/cloudinary.utils";
 import { AppError } from "../utils/appError";
 
 export class MaterialServices {
-    private readonly materialRepo: Repository<Material>
+    private materialRepo: Repository<Material>
     private uploader: CloudUploader
-    constructor() {
-        this.materialRepo = AppDataSource.getRepository(Material)
-        this.uploader = new CloudUploader()
+    constructor(materialRepo?: Repository<Material>, cloudUploader?: CloudUploader) {
+        this.materialRepo = materialRepo || AppDataSource.getRepository(Material);
+        this.uploader = cloudUploader || new CloudUploader(); 
     }
     async addMaterial(materialData: MaterialDTO) {
         if (!materialData.file) throw new AppError("no files provided", 400)
@@ -22,7 +22,7 @@ export class MaterialServices {
     }
     async getMaterial(id: number) {
         let material: IMaterial | null = await this.materialRepo.findOne({ where: { id } })
-        if (!material) throw new AppError("material not found", 404)
+        if (!material) throw new AppError("Material Not Found", 404)
         return material
     }
     async allMaterials() {
