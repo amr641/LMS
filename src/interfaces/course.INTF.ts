@@ -1,7 +1,7 @@
  interface ICourse {
     id: number;
     title: string;
-    description: string;
+    description?: string;
     instructor?: number;
     category?: number;
     level: string;
@@ -10,13 +10,13 @@
     startDate?: Date; // Optional
     endDate?: Date; // Optional
     isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
   }
 
   interface CourseDTO {
     id?:number
-    title?: string;
+    title: string;
     description?: string;
     instructorId?: number;
     categoryId?: number;
