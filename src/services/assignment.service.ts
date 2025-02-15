@@ -6,8 +6,8 @@ import { AppError } from "../utils/appError";
 import { CloudUploader } from "../utils/cloudinary.utils";
 
 export class AssignmentServices {
-    private readonly assignmentRepo: Repository<Assignment>
-    private readonly uploader: CloudUploader
+      public assignmentRepo: Repository<Assignment>
+     public uploader: CloudUploader
     constructor() {
         this.assignmentRepo = AppDataSource.getRepository(Assignment)
         this.uploader = new CloudUploader()

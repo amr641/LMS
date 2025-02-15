@@ -17,13 +17,18 @@ export class CategoryService {
 
     }
     async getAllCategoris() {
-        let categories: [ICategory[], number] = await this.categoryRepo.findAndCount();
-        if (!categories[1]) throw new AppError("Out Of categories", 404)
+        let categories: ICategory[] = await this.categoryRepo.find();
+        if (!categories.length) throw new AppError("Out Of categories", 404)
         return categories
     }
+    async getCategory(id: number) {
+        let category: ICategory | null = await this.categoryRepo.findOne({ where: { id } });
+        if (!category) throw new AppError("Category Not Found", 404)
+        return category
+    }
     async updateCategory(data: CategoryDto) {
-        let category = await this.categoryRepo.findOne({ where: { id: data.id } });
-        if (!category) throw new AppError("category not found", 404);
+        if (!data.id) throw new AppError("Please Provide the Required Data", 400)
+        let category = await this.getCategory(data?.id)
         Object.assign(category, {
             name: data.name,
             description: data.description
@@ -31,11 +36,9 @@ export class CategoryService {
         category = await this.categoryRepo.save(category);
         return category;
     }
-    async deletecategory (id:number){
-        let category = await this.categoryRepo.findOne({ where: {id} });
-
-       await this.categoryRepo.delete(id);
-  
+    async deletecategory(id: number) {
+        let category = await this.getCategory(id);
+        await this.categoryRepo.delete(id);
     }
 
 

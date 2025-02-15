@@ -16,6 +16,11 @@ export class CategoryController {
         let categories = await this.categoryService.getAllCategoris()
         res.status(200).json({ message: "success", categories })
     }
+    async getCategory(req: Request, res: Response) {
+        let { id } = req.params
+        let category = await this.categoryService.getCategory(Number(id))
+        res.status(200).json({ message: "success", category })
+    }
     async editCategory(req: Request, res: Response) {
         let { name, description } = req.body
         let category = await this.categoryService.updateCategory({
@@ -26,7 +31,7 @@ export class CategoryController {
         res.status(201).json({ message: "success", category })
     }
     async deleteCategory(req: Request, res: Response) {
-       await this.categoryService.deletecategory(Number(req.params.id))
+        await this.categoryService.deletecategory(Number(req.params.id))
         res.status(201).json({ message: `category with id : ${req.params.id} deleted successfully` })
     }
 }

@@ -10,9 +10,10 @@ categoryRouter.use(verifyToken)
     .get("/", categoryController.getCategories.bind(categoryController))
 
     .use(allowedTo(Roles.ADMIN))
-    
+
     .post("/", categoryController.createCategory.bind(categoryController))
 
     .patch("/:id", categoryController.editCategory.bind(categoryController))
+    .get("/:id", categoryController.getCategory.bind(categoryController))
 
     .delete("/:id", categoryController.deleteCategory.bind(categoryController));
