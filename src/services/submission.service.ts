@@ -6,19 +6,21 @@ import { ISubmission, SubmissionDTO } from "../interfaces/submission.INTF";
 import { AppError } from "../utils/appError";
 
 export class SubmissionServices {
-    private readonly submissionRepo: Repository<Submission>
-    private readonly cloudServices: CloudUploader
-    constructor() {
-        this.submissionRepo = AppDataSource.getRepository(Submission)
-        this.cloudServices = new CloudUploader()
+    private cloudServices: CloudUploader
+    private submissionRepo: Repository<Submission>
+
+    constructor(submissionRepo?: Repository<Submission>, cloudServices?: CloudUploader) {
+        this.submissionRepo = AppDataSource.getRepository(Submission) || submissionRepo
+        this.cloudServices = cloudServices || new CloudUploader()
     }
     async submitAssignment(submissionData: SubmissionDTO) {
-        if(!submissionData.file) throw new AppError("No Files Provided",400)
+        if (!submissionData.file) throw new AppError("No Files Provided", 400)
         let submission = this.submissionRepo.create({
             assignment: submissionData.assignment,
             file: await this.cloudServices.uploadToCloudinary(submissionData.file),
             student: submissionData.student,
-            submissionDate: new Date(new Date()).toISOString()
+            submissionDate: new Date(),
+            grade: submissionData.grade ?? 0,
         })
         await this.submissionRepo.save(submission)
         return submission
@@ -30,10 +32,10 @@ export class SubmissionServices {
     }
     async getAssignmentSubmissions(assignmentId: number) {
         let submissions: ISubmission[] = await this.submissionRepo
-        .createQueryBuilder("submission")
-        .innerJoin("submission.assignment", "assignment")
-        .where("assignment.id = :assignmentId", { assignmentId })
-        .getMany();
+            .createQueryBuilder("submission")
+            .innerJoin("submission.assignment", "assignment")
+            .where("assignment.id = :assignmentId", { assignmentId })
+            .getMany();
         if (!submissions.length) throw new AppError("No Submissions Provided For This Assignment", 404);
         return submissions
     }

@@ -1,10 +1,6 @@
 import { Repository } from "typeorm";
-import { Material } from "../models/materials.mode";
 import { AppDataSource } from "../config/dbConfig";
-import { IMaterial, MaterialDTO } from "../interfaces/materials.INTF";
 import { CloudUploader } from "../utils/cloudinary.utils";
-import { AppError } from "../utils/appError";
-import { MaterialServices } from "../services/materials.service";
 import { AssignmentServices } from "../services/assignment.service";
 import { Assignment } from "../models/assignments.model";
 import { AssignmentDTO } from "../interfaces/assignment.INTF";

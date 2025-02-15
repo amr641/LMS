@@ -1,16 +1,20 @@
 import { Request, Response } from "express";
 import { AssignmentServices } from "../services/assignment.service";
-const message = "message"
+import { AppDataSource } from "../config/dbConfig";
+import { Assignment } from "../models/assignments.model";
+import { CloudUploader } from "../utils/cloudinary.utils";
+const message = "message";
+
 export class AssignmetController {
     private readonly assignmentServices: AssignmentServices;
     constructor() {
-        this.assignmentServices = new AssignmentServices()
+        this.assignmentServices = new AssignmentServices(AppDataSource.getRepository(Assignment), new CloudUploader())
     }
     async addAssignment(req: Request, res: Response) {
         let file: any = req.files?.description
         let { title, dueDate, course } = req.body
         console.log(dueDate);
-        
+
         let assignment = await this.assignmentServices.addAssignment({
             course: Number(course),
             title,
