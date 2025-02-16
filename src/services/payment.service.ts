@@ -14,12 +14,12 @@ import { AppError } from '../utils/appError';
 import { PaymentStatus } from '../enums/payment.status';
 
 export class PaymentService {
-    private readonly paymentRepo: Repository<Payment>
+    private paymentRepo!: Repository<Payment>;
 
 
-    constructor() {
+    constructor(paymentRepo?: Repository<Payment>) {
         this.initializePayPal();
-        this.paymentRepo = AppDataSource.getRepository(Payment)
+        this.paymentRepo = AppDataSource.getRepository(Payment) || paymentRepo
 
     }
     private async initializePayPal() {
@@ -73,7 +73,7 @@ export class PaymentService {
 
     async getPayment(id: number) {
         let payment: IPayment | null = await this.paymentRepo.findOne({ where: { id } })
-        if (!payment) throw new AppError("payment not found", 404)
+        if (!payment) throw new AppError("Payment Not Found", 404)
         return payment
     }
     async handleSuccess(successData: successPayment) {
