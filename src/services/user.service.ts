@@ -6,8 +6,8 @@ import { AppError } from "../utils/appError";
 
 export class UserService {
     private readonly userRepo: Repository<User>
-    constructor() {
-        this.userRepo = AppDataSource.getRepository(User)
+    constructor(userRepo?: Repository<User>) {
+        this.userRepo = AppDataSource.getRepository(User)||userRepo
     }
     async getAllUsers() {
         let users: IUser[] | [] = await this.userRepo.find({ select: ["name", "email", "phone", "role"] })

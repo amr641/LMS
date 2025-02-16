@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import { AppDataSource } from "../config/dbConfig";
+import { User } from "../models/user.model";
 let message = "success"
 export class UserController {
     private readonly userServices: UserService
     constructor() {
-        this.userServices = new UserService()
+        this.userServices = new UserService(AppDataSource.getRepository(User))
     }
     async getAllUsers(req: Request, res: Response) {
         let users = await this.userServices.getAllUsers()

@@ -14,7 +14,7 @@ jest.mock("../config/dbConfig", () => ({
 
 describe("UserService", () => {
     let userService: UserService;
-    let mockRepo: jest.Mocked<Repository<IUser>>;
+    let mockRepo: jest.Mocked<Repository<User>>;
 
     beforeEach(() => {
         mockRepo = {
@@ -22,16 +22,17 @@ describe("UserService", () => {
             findOne: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
-        } as unknown as jest.Mocked<Repository<IUser>>;
+            create:jest.fn()
+        } as unknown as jest.Mocked<Repository<User>>;
 
         (AppDataSource.getRepository as jest.Mock).mockReturnValue(mockRepo);
-        userService = new UserService();
+        userService = new UserService(mockRepo);
     });
 
     describe("getAllUsers", () => {
         it("should return a list of users", async () => {
             const mockUsers = [
-                { name: "Amr", email: "amr@example.com", phone: 123456789, role: "admin" as Roles },
+               mockRepo.create({ name: "Amr", email: "amr@example.com", phone: 123456789, role: "admin" as Roles }),
             ];
 
             mockRepo.find.mockResolvedValue(mockUsers);
@@ -54,8 +55,7 @@ describe("UserService", () => {
 
     describe("getUser", () => {
         it("should return a user by ID", async () => {
-            const mockUser = { name: "Amr", email: "amr@example.com", phone: 123456789, role: "admin" as Roles };
-
+            const mockUser =Object.assign(new User(),{id:1, name: "Amr", email: "amr@example.com", phone: 123456789, role: "admin" as Roles });
             mockRepo.findOne.mockResolvedValue(mockUser);
             const user = await userService.getUser(1);
 

@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { OAuthGoogleService } from "../../services/auth/googleOAuth.service";
 import { AuthService } from "../../services/auth/auth.service";
+import { AppDataSource } from "../../config/dbConfig";
+import { User } from "../../models/user.model";
 
 export class AuthController {
     private authServices: AuthService;
     private googleAuth: OAuthGoogleService
 
     constructor() {
-        this.authServices = new AuthService();
+        this.authServices = new AuthService(AppDataSource.getRepository(User));
         this.googleAuth = new OAuthGoogleService()
     }
 

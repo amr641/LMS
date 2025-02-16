@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { MaterialServices } from "../services/materials.service";
+import { AppDataSource } from "../config/dbConfig";
+import { Material } from "../models/materials.mode";
+import { CloudUploader } from "../utils/cloudinary.utils";
 
 const message = "success"
 export class MaterialController {
     private readonly materialServices: MaterialServices
     constructor() {
-        this.materialServices = new MaterialServices()
+        this.materialServices = new MaterialServices(AppDataSource.getRepository(Material),new CloudUploader())
 
     }
     async addMaterials(req: Request, res: Response) {

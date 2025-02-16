@@ -11,10 +11,10 @@ import { ResetPasswordDTO } from "../../types/auth.types"
 
 
 export class AuthService {
-    private readonly userRepo: Repository<User>
+    private  userRepo: Repository<User>
 
-    constructor() {
-        this.userRepo = AppDataSource.getRepository(User);
+    constructor(userRepo?: Repository<User>) {
+        this.userRepo = AppDataSource.getRepository(User)||userRepo;
     }
     async register(userData: IUser) {
         let user: User | null = await this.userRepo.findOneBy({ email: userData.email })

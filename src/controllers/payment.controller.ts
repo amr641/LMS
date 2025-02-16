@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { PaymentService } from "../services/payment.service";
 import { CourseService } from "../services/course.service";
+import { AppDataSource } from "../config/dbConfig";
+import { Payment } from "../models/payment.model";
 const message = "success"
 
 export class PaymentController {
@@ -8,7 +10,7 @@ export class PaymentController {
     private readonly courseServices: CourseService
 
     constructor() {
-        this.paymentServices = new PaymentService()
+        this.paymentServices = new PaymentService(AppDataSource.getRepository(Payment))
         this.courseServices = new CourseService()
     }
     async createPayment(req: Request, res: Response) {
@@ -20,7 +22,7 @@ export class PaymentController {
             amount: isCourse.price ? isCourse.price : 0,
             user: Number(user)
         })
-        res.status(200).json({url})
+        res.status(200).json({ url })
     }
     async getPayment(req: Request, res: Response) {
         let { id } = req.params
@@ -46,8 +48,8 @@ export class PaymentController {
     async handleCanceledPayment(req: Request, res: Response) {
         let { userId } = req.params
         let { title } = req.query
-     let payment=    await this.paymentServices.handleCancel({ user: Number(userId), description: title as string })
-        res.status(201).json({ message: "Payment Canceled" ,payment})
+        let payment = await this.paymentServices.handleCancel({ user: Number(userId), description: title as string })
+        res.status(201).json({ message: "Payment Canceled", payment })
     }
     async deletePayment(req: Request, res: Response) {
         let { id } = req.params
