@@ -14,7 +14,6 @@ courseRouter.use(verifyToken)
     .get("/courses/:id", courseController.getCourse.bind(courseController))
     .get("/courses/:id/get-certificate", certificates.getMyCertificate.bind(certificates))
 
-
     .post("/courses", allowedTo(Roles.INSTRUCTOR), validateCategoryExists, courseController.createCourse.bind(courseController))
     .get("/category/:categoryId/courses", validateCategoryExists, courseController.getCategoryCourses.bind(courseController))
     .get("/category/:categoryId/courses/:courseId", validateCategoryExists, courseController.getCourseFromCategory.bind(courseController))

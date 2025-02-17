@@ -17,10 +17,18 @@ export class CourseService {
         return course
 
     }
-    async getAllCourses() {
-        let courses: ICourse[] | [] = await this.courseRepo.find()
+    async getAllCourses(page: number, limit: number) {
+        const [courses, total] = await this.courseRepo.findAndCount({
+            take: limit || 0,
+            skip: (page - 1) * limit || 0,
+        });
         if (!courses.length) throw new AppError("No Courses avilable", 404)
-        return courses
+        return {
+            data: courses,
+            total,
+            page,
+            totalPages: Math.ceil(total / limit),
+        }
     }
     async getCourse(id: number) {
         let course: ICourse | null = await this.courseRepo.findOne({ where: { id } })
@@ -41,8 +49,14 @@ export class CourseService {
 
     }
 
-    async getCategoryCourses(categoryId: number) {
-        let courses: ICourse[] = await this.courseRepo.find({ where: { category: categoryId } })
+    async getCategoryCourses(categoryId: number, page: number, limit: number) {
+        const courses = await this.courseRepo
+            .createQueryBuilder("course")
+            .innerJoinAndSelect("course.category", "category")
+            .where("category.id = :categoryId", { categoryId })
+            .skip((page - 1) * limit || 0) // Offset calculation
+            .take(limit || 0) // Limit per page
+            .getManyAndCount();
         if (!courses.length) throw new AppError("No Courses avilable", 404)
         return courses
     }

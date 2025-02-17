@@ -21,12 +21,14 @@ export class CourseController {
         res.status(200).json({ message, course })
     }
     async getAllCourses(req: Request, res: Response) {
-        let courses: ICourse[] = await this.courseServices.getAllCourses()
-        res.status(200).json({ message, courses })
+        let { page, limit } = req.query
+        let data = await this.courseServices.getAllCourses(Number(page), Number(limit))
+        res.status(200).json({ message, data })
     }
     async getCategoryCourses(req: Request, res: Response) {
+        let { page, limit } = req.query
         let { categoryId } = req.params;
-        let courses: ICourse[] = await this.courseServices.getCategoryCourses(Number(categoryId));
+        let courses= await this.courseServices.getCategoryCourses(Number(categoryId),Number(page),Number(limit));
         res.status(200).json({ message, courses })
     }
     async getCourseFromCategory(req: Request, res: Response) {
