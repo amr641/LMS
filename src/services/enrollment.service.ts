@@ -1,20 +1,19 @@
 import { Repository } from "typeorm";
-
 import { AppDataSource } from "../config/dbConfig";
 import { EnrollmentDTO, IEnrollment } from "../interfaces/enrollment.INTF";
-import { PaymentService } from "./payment.service";
 import { CourseService } from "./course.service";
 import { AppError } from "../utils/appError";
 import { Enrollment } from "../models/enrollment.model";
+import Redis from "ioredis";
 export class EnrollmentServices {
     private readonly enrollementRepo: Repository<Enrollment>;
-    private paymentServices: PaymentService;
-    private courseServices: CourseService
+    private courseServices: CourseService;
+    private readonly redisServices: Redis
 
     constructor() {
         this.enrollementRepo = AppDataSource.getRepository(Enrollment);
-        this.paymentServices = new PaymentService();
-        this.courseServices = new CourseService()
+        this.courseServices = new CourseService();
+        this.redisServices = new Redis();
 
     }
 
@@ -41,8 +40,15 @@ export class EnrollmentServices {
         return enrollment
     }
     async getAllEnrollments() {
+        const cachedKey = "enrollments"
+        let cachedData = await this.redisServices.getex(cachedKey)
+        if (cachedData) {
+            return JSON.parse(cachedData); // if found respond with cached data
+        }
+
         let enrollments: IEnrollment[] | [] = await this.enrollementRepo.find()
         if (!enrollments.length) throw new AppError("Out Of Enrollments", 404)
+        await this.redisServices.setex(cachedKey, 10, JSON.stringify(enrollments))
         return enrollments
     }
     async updateEnrollment(enrollmentData: EnrollmentDTO, id: number) {

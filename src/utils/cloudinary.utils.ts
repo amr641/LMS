@@ -31,7 +31,7 @@ export class CloudUploader {
         try {
             const segments = url.split('/');
             const publicId = segments[segments.length - 1].split('.')[0];
-            let result;
+            let result
             if (publicId) result = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
 
             if (result.result === 'ok') {
