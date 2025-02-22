@@ -1,7 +1,18 @@
 # LMS Project
 
 ## Overview
-The Learning Management System (LMS) is a backend application built with TypeScript, Node.js, and MySQL. It provides an API for managing courses, enrollments, and user authentication.
+The Learning Management System (LMS) is a backend application built with TypeScript, Node.js, and MySQL. The LMS supports PayPal for payments, Cloudinary for media storage, TypeORM for database management, and PDFKit for certificate generation. It uses Passport for Google OAuth authentication and Jest for unit testing.
+
+### Models
+The system includes the following models:
+- User: Manages authentication and user roles.
+- Category: Organizes courses into different categories.
+- Course: Represents courses with details such as title, description, and instructor.
+- Payment: Handles transactions, supporting PayPal integration.
+- Enrollment: Tracks user enrollments in courses.
+- Material: Stores learning materials and resources.
+- Assignment: Manages assignments given to users.
+- Submission: Tracks user submissions for assignments.
 
 ## Prerequisites
 To run this project, ensure you have the following installed:
@@ -39,7 +50,6 @@ Once the containers are running, execute the migrations:
 ```sh
 docker exec -it lms-app npm run typeorm migration:run
 ```
-
 
 ## Stopping the Application
 To stop and remove the running containers, use:
