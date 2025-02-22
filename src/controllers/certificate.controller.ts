@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { CourseService } from "../services/course.service";
 import { generateCertificate } from "../helpers/certificateGenerator";
+import { AppDataSource } from "../config/dbConfig";
+import { Course } from "../models/course.model";
+import { redisServices } from "../config/redisConfig";
 
 export class Certificate {
     private readonly courseServices: CourseService;
     constructor() {
-        this.courseServices = new CourseService()
+        this.courseServices = new CourseService(AppDataSource.getRepository(Course),redisServices)
     }
     async getMyCertificate(req: Request, res: Response) {
         let userName = req.user?.email;

@@ -2,13 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../config/dbConfig";
 import { Category } from "../models/category.model";
 import { AppError } from "../utils/appError";
-import { AssignmentServices } from "../services/assignment.service";
 import { Submission } from "../models/submission.model";
 import { Assignment } from "../models/assignments.model";
 import { Payment } from "../models/payment.model";
 import { CourseService } from "../services/course.service";
 import { PaymentStatus } from "../enums/payment.status";
-const courseServices = new CourseService()
+import { Course } from "../models/course.model";
+import { redisServices } from "../config/redisConfig";
+const courseServices = new CourseService(AppDataSource.getRepository(Course),redisServices)
 const SubmissionRepo = AppDataSource.getRepository(Submission);
 const assignmentRepo = AppDataSource.getRepository(Assignment)
 const validateCategoryExists = async (

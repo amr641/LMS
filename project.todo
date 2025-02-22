@@ -3,6 +3,6 @@
 pagination[✔]
 filter[✔]
 
-2-redis []
-3-docker file []
+2-redis [✔]
+3-docker file [✔]
 4-swagger documentaions []

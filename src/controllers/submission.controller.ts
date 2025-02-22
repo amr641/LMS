@@ -15,7 +15,6 @@ export class SubmissionController {
         let submission = await this.submissionServices.submitAssignment({
             file: file?.data,
             student: Number(req.user?.id),
-            
             assignment: Number(req.body.assignment),
 
         })

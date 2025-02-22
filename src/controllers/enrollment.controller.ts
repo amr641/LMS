@@ -1,18 +1,27 @@
 import { Response, Request } from "express";
 import { EnrollmentServices } from "../services/enrollment.service";
 import { IEnrollment } from "../interfaces/enrollment.INTF";
-const message = "success"
+import { AppDataSource } from "../config/dbConfig";
+import { Enrollment } from "../models/enrollment.model";
+import { CourseService } from "../services/course.service";
+import Redis from "ioredis";
+import { Course } from "../models/course.model";
+import { redisServices } from "../config/redisConfig";
+const message = "success";
+
 export class EnrollmentController {
     private readonly enrollmentServices: EnrollmentServices
     constructor() {
-        this.enrollmentServices = new EnrollmentServices()
+        this.enrollmentServices = new EnrollmentServices(AppDataSource.getRepository(Enrollment),
+            new CourseService(AppDataSource.getRepository(Course), redisServices),
+            redisServices)
     }
     async createEnrollment(req: Request, res: Response) {
         let enrollment = await this.enrollmentServices.createEnrollment({
             student: Number(req.user?.id),
             enrollmentDate: new Date(req.body.enrollmentDate),
             ...req.body
- 
+
         })
 
 

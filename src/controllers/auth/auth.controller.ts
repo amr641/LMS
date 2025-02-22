@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request  , Response } from "express";
 import { OAuthGoogleService } from "../../services/auth/googleOAuth.service";
 import { AuthService } from "../../services/auth/auth.service";
 import { AppDataSource } from "../../config/dbConfig";
@@ -24,7 +24,7 @@ export class AuthController {
 
     }
     async loginWithGoogle(req: Request, res: Response) { // login/register if user does not exist
-        let token = await this.googleAuth.loginWithGoogle(req, res)
+        let token = await this.googleAuth.loginWithGoogle(req as any , res as any)
         res.status(200).json({ message: "success", token })
     }
     async resetPassword(req: Request, res: Response) { // reset password

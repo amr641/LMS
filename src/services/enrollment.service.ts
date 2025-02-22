@@ -5,15 +5,14 @@ import { CourseService } from "./course.service";
 import { AppError } from "../utils/appError";
 import { Enrollment } from "../models/enrollment.model";
 import Redis from "ioredis";
+import { Course } from "../models/course.model";
 export class EnrollmentServices {
-    private readonly enrollementRepo: Repository<Enrollment>;
-    private courseServices: CourseService;
-    private readonly redisServices: Redis
 
-    constructor() {
-        this.enrollementRepo = AppDataSource.getRepository(Enrollment);
-        this.courseServices = new CourseService();
-        this.redisServices = new Redis();
+
+    constructor(private readonly enrollementRepo: Repository<Enrollment>,
+        private courseServices: CourseService,
+        private readonly redisServices: Redis) {
+
 
     }
 

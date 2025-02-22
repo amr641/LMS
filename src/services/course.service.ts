@@ -1,16 +1,13 @@
 import { Repository } from "typeorm";
 import { Course } from "../models/course.model";
-import { AppDataSource } from "../config/dbConfig";
 import { CourseDTO, ICourse } from "../interfaces/course.INTF";
 import { AppError } from "../utils/appError";
 import Redis from "ioredis"
 
 export class CourseService {
-    private readonly courseRepo: Repository<Course>;
-    private readonly redisServices: Redis
-    constructor() {
-        this.courseRepo = AppDataSource.getRepository(Course)
-        this.redisServices = new Redis()
+    constructor(private readonly courseRepo: Repository<Course>,
+        private readonly redisServices: Redis) {
+
     }
 
     async createCourse(courseData: CourseDTO) {
@@ -19,7 +16,7 @@ export class CourseService {
         return course
     }
     async getAllCourses(page: number, limit: number) {
-        const cacheKey = `courses with page${page} and limit ${limit}`;
+        const cacheKey = `courses with page${page} and limit ${limit}`; //making the key dynamic to work correctly with redis
         let cachedData = await this.redisServices.getex(cacheKey); // first check the cache
 
         if (cachedData) {

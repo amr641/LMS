@@ -9,41 +9,39 @@ import { Material } from "../models/materials.mode";
 import { Assignment } from "../models/assignments.model";
 import { Submission } from "../models/submission.model";
 
-export const AppDataSource =
-    new DataSource({
-        type: "mysql",
-        host: "localhost",
-        port: 3306,
-        username: "root",
-        password: "",
-        database: "lms",
-        entities: [
-            User,
-            Category,
-            Course,
-            Payment,
-            Enrollment,
-            Material,
-            Assignment,
-            Submission
-        ],
-        migrations:["src/migrations"],
-        synchronize: false,
-        logging: false,
-    });
-class DBconnection {
+const AppDataSource = new DataSource({
+    type: "mysql",
+    host: process.env.DB_HOST || "localhost",  // Use environment variable for host
+    port: parseInt(process.env.DB_PORT || "3306"),  // Use environment variable for port
+    username: process.env.DB_USER || "root",  // Use environment variable for username
+    password: process.env.DB_PASSWORD || "",  // Use environment variable for password
+    database: process.env.DB_NAME || "lms",  // Use environment variable for database name
+    entities: [
+        User,
+        Category,
+        Course,
+        Payment,
+        Enrollment,
+        Material,
+        Assignment,
+        Submission
+    ],
+    migrations: ["src/migrations"],
+    synchronize: false,
+    logging: false,
+});
 
-    establishConnection() {
+   const  establishConnection =()=> {
         AppDataSource.initialize()
             .then(() => {
                 console.log("database connected succesfully");
 
             }).catch((err) => {
-                console.log('Unable to connect to the database:', err);
+                console.log('Unable to connect to the database');
 
             })
     }
 
-}
 
-export default DBconnection
+
+export {establishConnection,AppDataSource} 

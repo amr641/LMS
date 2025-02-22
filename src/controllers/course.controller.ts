@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { CourseService } from "../services/course.service";
 import { ICourse } from "../interfaces/course.INTF";
+import { AppDataSource } from "../config/dbConfig";
+import { Course } from "../models/course.model";
+import { redisServices } from "../config/redisConfig";
 let message = "success"
 export class CourseController {
     private readonly courseServices: CourseService
     constructor() {
-        this.courseServices = new CourseService()
+        this.courseServices = new CourseService(AppDataSource.getRepository(Course), redisServices)
     }
     async createCourse(req: Request, res: Response) {
         let course: ICourse = await this.courseServices.createCourse({
@@ -28,7 +31,7 @@ export class CourseController {
     async getCategoryCourses(req: Request, res: Response) {
         let { page, limit } = req.query
         let { categoryId } = req.params;
-        let courses= await this.courseServices.getCategoryCourses(Number(categoryId),Number(page),Number(limit));
+        let courses = await this.courseServices.getCategoryCourses(Number(categoryId), Number(page), Number(limit));
         res.status(200).json({ message, courses })
     }
     async getCourseFromCategory(req: Request, res: Response) {

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build: .  # Build the Dockerfile in the current directory
+    container_name: lms-app  # Optional: Give your container a name
+    ports:
+      - "3000:3000"  # Map host port 3000 to container port 3000
+    environment:
+      - REDIS_HOST=redis  # Use the Redis service name
+      - REDIS_PORT=6379  # Default Redis port
+      - DB_HOST=db  # Use the database service name
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=yourpassword  # Set a secure password
+      - DB_NAME=lms
+    depends_on:
+      - redis
+      - db  # Ensure the database starts first
+
+  redis:
+    image: redis:latest  # Use the official Redis image
+    container_name: redis  # Optional: Give your Redis container a name
+    ports:
+      - "6379:6379"  # Map host port 6379 to container port 6379
+    volumes:
+      - redis_data:/data  # Persist Redis data
+
+  db:
+    image: mysql:8.0  # Use the official MySQL image
+    container_name: mysql_db  # Optional: Give your MySQL container a name
+    environment:
+      MYSQL_ROOT_PASSWORD: yourpassword  # Set the root password
+      MYSQL_DATABASE: lms  # Create a default database
+    ports:
+      - "3306:3306"  # Expose MySQL port
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist database data
+
+volumes:
+  redis_data:  # Define a volume for Redis data persistence
+  mysql_data:  # Define a volume for MySQL data persistence

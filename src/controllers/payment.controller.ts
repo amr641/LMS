@@ -3,6 +3,9 @@ import { PaymentService } from "../services/payment.service";
 import { CourseService } from "../services/course.service";
 import { AppDataSource } from "../config/dbConfig";
 import { Payment } from "../models/payment.model";
+import { Course } from "../models/course.model";
+import { redisServices } from "../config/redisConfig";
+
 const message = "success"
 
 export class PaymentController {
@@ -11,7 +14,7 @@ export class PaymentController {
 
     constructor() {
         this.paymentServices = new PaymentService(AppDataSource.getRepository(Payment))
-        this.courseServices = new CourseService()
+        this.courseServices = new CourseService(AppDataSource.getRepository(Course),redisServices)
     }
     async createPayment(req: Request, res: Response) {
         let { course } = req.body
