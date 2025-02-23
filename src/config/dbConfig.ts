@@ -11,11 +11,11 @@ import { Submission } from "../models/submission.model";
 
 const AppDataSource = new DataSource({
     type: "mysql",
-    host: process.env.DB_HOST || "localhost",  // Use environment variable for host
+    host: process.env.DB_HOST as string|| "localhost",  // Use environment variable for host
     port: parseInt(process.env.DB_PORT || "3306"),  // Use environment variable for port
-    username: process.env.DB_USER || "root",  // Use environment variable for username
+    username: process.env.DB_USER as string || "root",  // Use environment variable for username
     password: process.env.DB_PASSWORD || "",  // Use environment variable for password
-    database: process.env.DB_NAME || "lms",  // Use environment variable for database name
+    database: process.env.DB_NAME as string|| "lms",  // Use environment variable for database name
     entities: [
         User,
         Category,
