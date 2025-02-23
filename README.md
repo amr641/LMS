@@ -31,11 +31,39 @@ cd lms-project
 Create a `.env` file in the project root and configure your database credentials:
 
 ```sh
+# Application Settings
+PORT=3000
+NODE_ENV=development
+
+# Database Configuration
 DB_HOST=db
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=lms
+
+# JWT Authentication
+JWT_SECRET=your-jwt-secret-key
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+# OAuth (Google Authentication)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# PayPal API Credentials
+PAYPAL_CLIENT_ID=your-paypal-client-id
+PAYPAL_CLIENT_SECRET=your-paypal-client-secret
+
+# Cloudinary API Credentials
+CLOUDINARY_API_KEY=your-cloudinary-api-key
+CLOUDINARY_API_SECRET=your-cloudinary-api-secret
+
+# Base URL for API
+BASE_URL=http://localhost:3000/api/v1
+
 ```
 
 ### 3. Run with Docker Compose
