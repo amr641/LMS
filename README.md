@@ -84,7 +84,9 @@ To stop and remove the running containers, use:
 ```sh
 docker-compose down
 ```
+📜 API Documentation
 
+Check out the Postman API documentation here: https://documenter.getpostman.com/view/36174729/2sAYdimUdJ
 ## Contributing
 Feel free to submit issues or pull requests to improve the project.
 
