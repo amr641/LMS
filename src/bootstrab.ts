@@ -9,6 +9,8 @@ import { paymentRouter } from "./routes/payment.routes";
 import { materialRouter } from "./routes/material.routes";
 import { assignmentRouter } from "./routes/assignment.routes";
 import { submissionRouter } from "./routes/submission.routes";
+
+
 export function bootstrab(app: Express) {
     process.on("uncaughtException", (err: Error) => {
         console.error("Uncaught Exception:", err);
